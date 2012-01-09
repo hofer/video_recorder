@@ -15,12 +15,17 @@ end
   
 desc "Install player."
 task :install_player => :install_packages do
+  
+  # Install mplayer
 	sh "wget --no-check-certificate https://github.com/downloads/hofer/video_recorder/mplayer.tar.gz"
   sh "tar -xvzf mplayer.tar.gz"
   sh "cd mplayer-export-2012-01-09/ && ./configure"
   sh "cd mplayer-export-2012-01-09/ && sudo make clean install"
   sh "rm -rf mplayer*"
-  sh "sudo gem install cgi sinatra"
+  
+  # Install ruby script which allows to play a video from url
+  sh "sudo gem install sinatra"
+  sh "wget --no-check-certificate https://raw.github.com/hofer/video_recorder/master/videoplayer.rb"
   sh "ruby videoplayer.rb &"
 end
 
@@ -31,11 +36,19 @@ task :play do
 end
 
 desc "Record from screen"
-task :record do
+task :record_start do
 	puts "Start recording from screen :0"
-	sh "rm out.mpg"
+	sh "rm -f out.mpg"
 	sh "ffmpeg -f x11grab -s 1000x700 -i :0 out.mpg"
 end
+
+desc "Stop recording"
+task :record_stop do
+	puts "Start recording from screen :0"
+	sh "killall ffmpeg"
+end
+
+
 
 # desc "create a directory"
 # directory "dist"
