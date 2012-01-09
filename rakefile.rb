@@ -18,7 +18,10 @@ task :install_player => :install_packages do
 	sh "wget --no-check-certificate https://github.com/downloads/hofer/video_recorder/mplayer.tar.gz"
   sh "tar -xvzf mplayer.tar.gz"
   sh "cd mplayer-export-2012-01-09/ && ./configure"
-  sh "cd mplayer-export-2012-01-09/ && make clean install"
+  sh "cd mplayer-export-2012-01-09/ && sudo make clean install"
+  sh "rm -rf mplayer*"
+  sh "sudo gem install cgi sinatra"
+  sh "ruby videoplayer.rb &"
 end
 
 desc "Play recorded video"
