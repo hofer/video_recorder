@@ -10,7 +10,7 @@ task :install_recorder => :install_packages do
 	sh "wget http://ffmpeg.org/releases/ffmpeg-0.8.6.tar.gz"
   sh "tar -xvzf ffmpeg-0.8.6.tar.gz" 
   sh "cd ffmpeg-0.8.6 && ./configure --enable-gpl --enable-x11grab --enable-nonfree"
-  sh "cd ffmpeg-0.8.6 && make clean install"
+  sh "cd ffmpeg-0.8.6 && sudo make clean install"
 end
   
 desc "Install player."
@@ -58,7 +58,7 @@ task :test_application do
 end
 
 desc "Recording a test"
-task :record_stop => [:record_start, :test_application, :record_stop] do
+task :record_test => [:record_start, :test_application, :record_stop] do
 	puts "Start recording a test"
 end
 
