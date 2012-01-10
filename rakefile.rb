@@ -44,20 +44,22 @@ end
 
 desc "Stop recording"
 task :record_stop do
-	puts "Start recording from screen :0"
+	puts "Stop recording from screen :0"
 	sh "killall ffmpeg"
 end
 
 desc "Record a test"
-task :record_test do
-	puts "Start recording a test"
-	record_start
+task :test_application do
   sh "mkdir artifacts"
   sh "cp download-*.sh artifacts/"
   sh "cd artifacts && sh download-core-artifacts.sh"
   sh "cd artifacts && sh download-ml-artifacts.sh"
   sh "sh artifacts/ci/prepare-tests.sh"
-  record_stop
+end
+
+desc "Recording a test"
+task :record_stop => [:record_start, :test_application, :record_stop] do
+	puts "Start recording a test"
 end
 
 # desc "create a directory"
