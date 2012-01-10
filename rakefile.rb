@@ -40,7 +40,7 @@ desc "Record from screen"
 task :record_start do
 	puts "Start recording from screen :0"
 	sh "rm -f out.mpg"
-	sh "ffmpeg -f x11grab -s 1000x700 -i :0 out.mpg &"
+	sh "ffmpeg -f x11grab -s 1000x700 -i :0 out.mpg > /dev/null 2>&1 &"
 end
 
 desc "Stop recording"
@@ -56,10 +56,15 @@ task :test_application do
   sh "cd artifacts && sh download-core-artifacts.sh"
   sh "cd artifacts && sh download-ml-artifacts.sh"
   sh "sh artifacts/ci/prepare-tests.sh"
-  sh "cd tests && ./run-tests.sh functional"
+  sh "cp ff-test-driver artifacts/ci"
+  sh "cd tests && sudo sh run-tests.sh functional"
 end
 
 desc "Recording a test"
 task :record_test => [:record_start, :test_application, :record_stop] do
 	puts "Start recording a test"
+end
+
+task :cleanup do
+	sh "sudo rm -rf artifacts core marklogic tests out.mpg"
 end
