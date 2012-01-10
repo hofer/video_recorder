@@ -45,12 +45,12 @@ end
 
 desc "Stop recording"
 task :record_stop do
-	puts "Stop recording from screen :0"
+	puts "Stop recording from screen :99"
 	sh "killall ffmpeg"
 end
 
 desc "Record a test"
-task :test_application do
+task :test_prepare do
   sh "mkdir artifacts"
   sh "cp download-*.sh artifacts/"
   sh "cd artifacts && sh download-core-artifacts.sh"
@@ -58,11 +58,15 @@ task :test_application do
   sh "sh artifacts/ci/prepare-tests.sh"
   sh "cp ff-test-driver artifacts/ci"
   sh "cp run-tests.sh tests/"
+end
+
+desc "Record a test"
+task :test_run do
   sh "cd tests && sudo sh run-tests.sh functional"
 end
 
 desc "Recording a test"
-task :record_test => [:record_start, :test_application, :record_stop] do
+task :record_test => [:record_start, :test_prepare, :test_run, :record_stop] do
 	puts "Start recording a test"
 end
 
