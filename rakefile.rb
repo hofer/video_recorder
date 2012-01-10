@@ -53,7 +53,7 @@ task :record_test do
 	puts "Start recording a test"
 	record_start
   sh "mkdir artifacts"
-  sh "mv download-*.sh artifacts/"
+  sh "cp download-*.sh artifacts/"
   sh "cd artifacts && sh download-core-artifacts.sh"
   sh "cd artifacts && sh download-ml-artifacts.sh"
   sh "sh artifacts/ci/prepare-tests.sh"
