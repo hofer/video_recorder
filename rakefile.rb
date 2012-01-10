@@ -48,7 +48,17 @@ task :record_stop do
 	sh "killall ffmpeg"
 end
 
-
+desc "Record a test"
+task :record_test do
+	puts "Start recording a test"
+	record_start
+  sh "mkdir artifacts"
+  sh "mv download-*.sh artifacts/"
+  sh "cd artifacts && sh download-core-artifacts.sh"
+  sh "cd artifacts && sh download-ml-artifacts.sh"
+  sh "sh artifacts/ci/prepare-tests.sh"
+  record_stop
+end
 
 # desc "create a directory"
 # directory "dist"
