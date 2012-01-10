@@ -40,7 +40,7 @@ desc "Record from screen"
 task :record_start do
 	puts "Start recording from screen :0"
 	sh "rm -f out.mpg"
-	sh "ffmpeg -f x11grab -s 1000x700 -i :99 out.mpg > /dev/null 2>&1 &"
+	sh "ffmpeg -f x11grab -s 1000x700 -i :0 out.mpg > /dev/null 2>&1 &"
 end
 
 desc "Stop recording"
@@ -62,7 +62,10 @@ end
 
 desc "Record a test"
 task :test_run do
-  sh "cd tests && sudo sh run-tests.sh functional"
+  sh "cd tests && sudo sh run-tests.sh functional" do |ok, status|
+    # ok or fail "Command filed with status (#{status.exitstatus}): [#{do_something}]"
+    # ok
+  end
 end
 
 desc "Recording a test"
