@@ -11,6 +11,7 @@ task :install_recorder => :install_packages do
   sh "tar -xvzf ffmpeg-0.8.6.tar.gz" 
   sh "cd ffmpeg-0.8.6 && ./configure --enable-gpl --enable-x11grab --enable-nonfree"
   sh "cd ffmpeg-0.8.6 && sudo make clean install"
+  sh "rm -rf ffmpeg-*"
 end
   
 desc "Install player."
@@ -39,7 +40,7 @@ desc "Record from screen"
 task :record_start do
 	puts "Start recording from screen :0"
 	sh "rm -f out.mpg"
-	sh "ffmpeg -f x11grab -s 1000x700 -i :0 out.mpg"
+	sh "ffmpeg -f x11grab -s 1000x700 -i :0 out.mpg &"
 end
 
 desc "Stop recording"
@@ -55,16 +56,10 @@ task :test_application do
   sh "cd artifacts && sh download-core-artifacts.sh"
   sh "cd artifacts && sh download-ml-artifacts.sh"
   sh "sh artifacts/ci/prepare-tests.sh"
+  sh "cd tests && ./run-tests.sh functional"
 end
 
 desc "Recording a test"
 task :record_test => [:record_start, :test_application, :record_stop] do
 	puts "Start recording a test"
 end
-
-# desc "create a directory"
-# directory "dist"
-# desc "package the whole app"
-# task :package => "dist" do
-#   sh "tar -czf dist/ImageConverter-#{version}.tar.gz #{src}"
-# end
