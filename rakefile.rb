@@ -57,6 +57,7 @@ task :test_application do
   sh "cd artifacts && sh download-ml-artifacts.sh"
   sh "sh artifacts/ci/prepare-tests.sh"
   sh "cp ff-test-driver artifacts/ci"
+  sh "cp run-tests.sh tests/"
   sh "cd tests && sudo sh run-tests.sh functional"
 end
 
