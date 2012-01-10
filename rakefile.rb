@@ -39,9 +39,8 @@ end
 desc "Play on tv"
 task :play_on_tv do
   sh "scp out.mpg repo.tools:/var/www/html/out.mpg"
-  sh "wget http://172.18.12.32:59623/play?p='http://repo.tools/out.mpg'"
+  sh "wget http://172.18.10.249:59623/play?p='http://repo.tools/out.mpg'"
 end
-
 
 desc "Record from screen"
 task :record_start do
