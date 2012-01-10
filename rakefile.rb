@@ -84,3 +84,4 @@ task :cleanup do
 end
 
 # http://172.18.12.111:/play?p=http://172.18.12.111:8085/out.mpg
+# http://ftp.br.debian.org/debian-multimedia/pool/main/x/xvidcore/xvidcore_1.3.2.orig.tar.gz

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+rm -f ~/.mozilla/firefox/*/.parentlock
+#rm -rf /var/go/.mozilla
+killall firefox
+
+BROWSER=`which firefox`
+if [ "$?" -eq 1 ];
+then
+    echo "Firefox not found."
+    exit 1
+fi
+
+export DISPLAY=:0
+
+$BROWSER &
+
