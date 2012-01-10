@@ -40,7 +40,7 @@ desc "Record from screen"
 task :record_start do
 	puts "Start recording from screen :0"
 	sh "rm -f out.mpg"
-	sh "ffmpeg -f x11grab -s 1000x700 -i :0 out.mpg > /dev/null 2>&1 &"
+	sh "ffmpeg -f x11grab -s 1000x700 -i :99 out.mpg > /dev/null 2>&1 &"
 end
 
 desc "Stop recording"
@@ -66,7 +66,7 @@ task :test_run do
 end
 
 desc "Recording a test"
-task :record_test => [:record_start, :test_prepare, :test_run, :record_stop] do
+task :record_test => [:test_prepare, :record_start, :test_run, :record_stop] do
 	puts "Start recording a test"
 end
 
