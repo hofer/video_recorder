@@ -72,7 +72,6 @@ task :test_prepare do
   coreVersion = "0.2911"
 
   mkdir "artifacts"
-  sh "cp download-*.sh artifacts/"
   sh "cd artifacts && wget -q -r -np -nH --cut-dirs=4 -R index.html* #{artifactsUrl}/ml/#{mlVersion}/"
   sh "cd artifacts && wget -q -r -np -nH --cut-dirs=4 -R index.html* #{artifactsUrl}/core/#{coreVersion}/"
   sh "sh artifacts/ci/prepare-tests.sh"
