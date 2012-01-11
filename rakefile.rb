@@ -2,7 +2,7 @@ task :default => :play
 
 desc "Install screen recorder."
 task :install_packages do
-	sh "sudo yum -y install wget gcc yasm-devel.x86_64 libXfixes-devel.x86_64 libXext-devel.x86_64 libX11-devel.x86_64"
+  sh "sudo yum -y install wget gcc yasm-devel.x86_64 libXfixes-devel.x86_64 libXext-devel.x86_64 libX11-devel.x86_64"
 end
 
 desc "Install screen recorder."
@@ -36,12 +36,13 @@ task :install_player => :install_packages do
   sh "sudo gem install sinatra"
   sh "wget --no-check-certificate https://raw.github.com/hofer/video_recorder/master/videoplayer.rb"
   sh "ruby videoplayer.rb &"
+
 end
 
 desc "Play recorded video"
 task :play do
   puts "Want to play ...."
-  sh "mplayer -fs out.mpg"
+  sh "mplayer -fs -zoom out.mp4"
 end
 
 desc "Play on tv"
@@ -54,7 +55,7 @@ desc "Record from screen"
 task :record_start do
   puts "Start recording from screen :0"
   sh "rm -f out.mp4"
-  sh "ffmpeg -f x11grab -s 1024x768 -i :0 -vcodec libxvid -r 25 -b 4000k -f mp4 out.mp4 > /dev/null 2>&1 &"
+  sh "ffmpeg -f x11grab -s 940x970 -i :13+20,100 -vcodec libxvid -r 25 -b 4000k -f mp4 out.mp4 > /dev/null 2>&1 &"
 end
 
 desc "Stop recording"
@@ -63,31 +64,31 @@ task :record_stop do
   sh "killall ffmpeg"
 end
 
-desc "Record a test"
+desc "Prepare a test run"
 task :test_prepare do
-  sh "mkdir artifacts"
+
+  artifactsUrl = "http://repo.tools/repos/go-artifacts"
+  mlVersion = "0.84"
+  coreVersion = "0.2911"
+
+  mkdir "artifacts"
   sh "cp download-*.sh artifacts/"
-  sh "cd artifacts && sh download-core-artifacts.sh"
-  sh "cd artifacts && sh download-ml-artifacts.sh"
+  sh "cd artifacts && wget -q -r -np -nH --cut-dirs=4 -R index.html* #{artifactsUrl}/ml/#{mlVersion}/"
+  sh "cd artifacts && wget -q -r -np -nH --cut-dirs=4 -R index.html* #{artifactsUrl}/core/#{coreVersion}/"
   sh "sh artifacts/ci/prepare-tests.sh"
-  sh "cp ff-test-driver artifacts/ci"
-  sh "cp run-tests.sh tests/"
+  cp "ff-test-driver", "artifacts/ci/"
+  cp "run-tests.sh", "tests/"
 end
 
 desc "Record a test"
 task :test_run do
   sh "cd tests && sudo sh run-tests.sh functional" do |ok, status|
-    # ok or fail "Command filed with status (#{status.exitstatus}): [#{do_something}]"
-    # ok
   end
 end
 
 desc "Recording a test"
-task :record_test => [:test_prepare, :record_start, :test_run, :record_stop] do
-end
+task :record_test => [:test_prepare, :record_start, :test_run, :record_stop]
 
 task :cleanup do
-  sh "sudo rm -rf artifacts core marklogic tests out.mp4"
+  sh "sudo rm -rf artifacts core marklogic tests out.mp4 nohup.out"
 end
-
-# http://172.18.12.111:/play?p=http://172.18.12.111:8085/out.mpg

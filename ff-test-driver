@@ -4,14 +4,15 @@ rm -f ~/.mozilla/firefox/*/.parentlock
 #rm -rf /var/go/.mozilla
 killall firefox
 
-BROWSER=`which firefox`
-if [ "$?" -eq 1 ];
-then
-    echo "Firefox not found."
-    exit 1
-fi
+#BROWSER=`which firefox`
+#if [ "$?" -eq 1 ];
+#then
+#    echo "Firefox not found."
+#    exit 1
+#fi
 
-export DISPLAY=:0
+export DISPLAY=:13
 
-$BROWSER &
+#$BROWSER --display :13 -fullscreen &
+/usr/bin/firefox -fullscreen --display=:13 &
 
