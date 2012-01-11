@@ -2,7 +2,7 @@ task :default => :play
 
 desc "Install screen recorder."
 task :install_packages do
-  sh "sudo yum -y install wget gcc yasm-devel.x86_64 libXfixes-devel.x86_64 libXext-devel.x86_64 libX11-devel.x86_64"
+  sh "sudo yum -y install wget gcc yasm-devel.x86_64 libXfixes-devel.x86_64 libXext-devel.x86_64 libX11-devel.x86_64 ImageMagick"
 end
 
 desc "Install screen recorder."
@@ -54,7 +54,7 @@ end
 desc "Record from screen"
 task :record_start do
   puts "Start recording from screen :0"
-  sh "rm -f out.mp4"
+  rm_rf "out.mp4"
   sh "ffmpeg -f x11grab -s 940x970 -i :13+20,100 -vcodec libxvid -r 25 -b 4000k -f mp4 out.mp4 > /dev/null 2>&1 &"
 end
 
@@ -86,8 +86,17 @@ task :test_run do
 end
 
 desc "Recording a test"
-task :record_test => [:test_prepare, :record_start, :test_run, :record_stop]
+task :record_fulltest => [:test_prepare, :record_start, :test_run, :record_stop]
+task :record_test => [:record_start, :test_run, :record_stop]
 
 task :cleanup do
-  sh "sudo rm -rf artifacts core marklogic tests out.mp4 nohup.out"
+  sh "sudo rm -rf artifacts core marklogic tests out.mp4 nohup.out screenshot.png"
 end
+
+task :screenshot do
+  sh "import -window root -display :13 screenshot.png"
+end
+
+# Xvfb :14 -screen 0 1280x1024x24 &
+# nohup vncserver :13 -geometry 1200x1200 &
+
